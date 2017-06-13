@@ -1,38 +1,37 @@
 package com.boot;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
+import com.boot.controller.ShipwreckController;
+import com.boot.model.Shipwreck;
+import com.boot.rep.ShipwreckRepository;
+
+import junit.framework.Assert;
+
+public class AppTest {
+    @InjectMocks
+	private ShipwreckController controller;
+    
+    @Mock
+    private ShipwreckRepository repository;
+    
+    @Before
+    public void init() {
+    	MockitoAnnotations.initMocks(this);
     }
-
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
-
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+    
+    @Test
+    public void test() {
+    	Shipwreck s = new Shipwreck();
+    	s.setId(1L);
+    	Mockito.when(repository.findOne(1L)).thenReturn(s);
+    	
+    	Shipwreck shipwreck = controller.get(1L);
+    	Assert.assertEquals(1L, shipwreck.getId().longValue());
     }
 }
